@@ -1,0 +1,176 @@
+@{
+    ViewBag.Title = "Home Page";
+}
+
+<link href="../../bootstrap/css/bootstrap-theme.css" rel="stylesheet" type="text/css" />
+<link href="../../bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" type="text/css" />
+<link href="../../bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css" />
+<link href="../../bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+    .atgmail {
+    position: absolute;
+    top: 27px;
+    right: 10px;
+    color: #999;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    user-select: none;
+    direction: ltr;
+    }
+    .hidden{display:none;}
+    .jfk-bubble
+    {
+        -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.2);
+        -moz-box-shadow: 0 1px 3px rgba(0,0,0,.2);
+        box-shadow: 0 1px 3px rgba(0,0,0,.2);
+        background-color: #fff;
+        border: 1px solid;
+        position: absolute;
+        z-index: 1201 !important;
+        border-color: #bbb #bbb #a8a8a8;
+        padding: 16px;
+        width: 255px;
+        line-height: 17px;
+    }
+    .jfk-bubble-arrowleft .jfk-bubble-arrowimplafter, .jfk-bubble-arrowright .jfk-bubble-arrowimplafter {
+border-color: transparent #fff;
+top: -8px;
+}
+</style>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+<script src="../../Scripts/jquery.maskedinput.js" type="text/javascript"></script>
+<script type="text/javascript">
+    jQuery(function ($) {
+        $("#txtDOB").mask("99/99/9999");
+        $("#txtDOB").focus();
+        $("#txtDOB").attr("placeholder", "mm/dd/yyyy");
+
+        $("#txtDOB").focusout(function myfunction() {
+            console.log($("#txtDOB").val());
+            if ($("#txtDOB").val() != "__/__/____") {
+                $('#loading').removeClass('hidden');
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/Test",
+                    data: { "username": "Jaimin" },
+                    success: function (data) {
+                        $('#ass').removeClass('hidden');
+
+                        $("#txtDOB").val('');
+                        //$("#txtDOB").focus();
+                        $('#assss').html("<b>'" + data + "'</b>");
+                        $('#loading').addClass('hidden');
+                    }
+                });
+            }
+            else {
+                $('#assss').html("<b>please enter dob</b>");
+            }
+        });
+    });
+    $("#txtDOB").keyup(function myfunction() {
+        $('#assss').html('');
+    });
+</script>
+<script type="text/javascript">
+//    var verifyCallback = function (response) {
+//        alert(response);
+//    };
+    var widgetId1;
+    var widgetId2;
+    var onloadCallback = function () {
+        // Renders the HTML element with id 'example1' as a reCAPTCHA widget.
+        // The id of the reCAPTCHA widget is assigned to 'widgetId1'.
+        var key = "@System.Configuration.ConfigurationManager.AppSettings["recaptchaKey"]";
+        widgetId1 = grecaptcha.render('example1', {
+            'sitekey': key,
+            'theme': 'light'
+        });
+    };
+    </script>
+
+
+    
+@section featured {
+    
+}
+
+@using(Html.BeginForm())
+{
+<ol class="round">
+    <li id="ass" class="one hidden">
+        <h5>
+            Getting Started</h5>
+        ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
+        enables a clean separation of concerns and that gives you full control over markup
+        for enjoyable, agile development. ASP.NET MVC includes many features that enable
+        fast, TDD-friendly development for creating sophisticated applications that use
+        the latest web standards. <a href="http://go.microsoft.com/fwlink/?LinkId=245151">Learn
+            more…</a> </li>
+    <li class="two">
+        <h5>
+            Add NuGet packages and jump-start your coding</h5>
+        NuGet makes it easy to install and update free libraries and tools. <a href="http://go.microsoft.com/fwlink/?LinkId=245153">
+            Learn more…</a> </li>
+    <li class="three">
+        <h5>
+            Find Web Hosting</h5>
+        You can easily find a web hosting company that offers the right mix of features
+        and price for your applications. <a href="http://go.microsoft.com/fwlink/?LinkId=245157">
+            Learn more…</a>
+        @Html.TextBox("txtDOB", "Date Of Birth")
+        <img id="loading" src="http://www.hsi.com.hk/HSI-Net/pages/images/en/share/ajax-loader.gif" class="hidden" alt="Alternate Text" />
+        <div id="assss"></div>
+        <div id="html_element"></div>
+        <span class="atgmail">gmail.com</span>
+        <div id="example1"></div>
+        @*<div id="aaa" class="g-recaptcha" data-sitekey="6Lc_0f4SAAAAAF9ZA_d7Dxi9qRbPMMNW-tLSvhe6"></div>*@
+        <input type="submit" name="name" value="Ok" onclick="myfunction();" />
+       
+        @Html.Raw(ViewBag.JavaScript)
+
+    </li>
+</ol>
+    <div class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        <p>One fine body&hellip;</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+}
+<script type="text/javascript">
+    function myfunction() {
+        alert(grecaptcha.getResponse(widgetId1));
+        if (grecaptcha.getResponse(widgetId1) == "") {
+            alert(grecaptcha.getResponse(widgetId1));
+        }
+        if (grecaptcha.getResponse(widgetId1).toString() != "" ) {
+            console.log(grecaptcha.getResponse(widgetId1));
+            $.ajax({
+                type: "POST",
+                url: "/Home/Index",
+                data: { "userId": $('#txtDOB').val().toString() },
+                success: function (data) {
+                    $('#ass').removeClass('hidden');
+
+                    $("#txtDOB").val('');
+                    //$("#txtDOB").focus();
+                    $('#assss').html("<b>'" + data + "'</b>");
+                    $('#loading').addClass('hidden');
+                }
+            });
+        }
+    }
+</script>
+<script src="https://www.google.com/recaptcha/api.js?onload=onloadCallback&render=explicit" ></script>
