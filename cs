@@ -6,15 +6,48 @@ using System.Web.Mvc;
 
 namespace WindowsFormsApplication1.Controllers
 {
+    public class abc 
+    {
+        public int Key {get;set;}
+        public int Count {get;set;}
+    }
     public class HomeController : Controller
     {
+        BrightTestDbEntities dbconnection = new BrightTestDbEntities();
+
         [HttpGet]
         public ActionResult Index()
         {
+            try
+            {
+                var list = getList().ToList();
+                return View(list);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
             ViewBag.Message = "Modify this template to jump-start your ASP.NET MVC application.";
-            
             return View();
         }
+
+
+        public IEnumerable<abc> getList()
+        {
+            try
+            {
+                var results = dbconnection.users.Where(r => r.role_id != null)
+                            .GroupBy(r => r.role_id)
+                            .Select(gr => new abc { Key = (int)gr.Key, Count = gr.Count()});
+                return results;
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+         
+
         [HttpPost]
         public ActionResult Index(FormCollection fc, string userId)
         {
@@ -47,9 +80,7 @@ namespace WindowsFormsApplication1.Controllers
             {
                 str1 = "Someone already has that username. Try another?";
             }
-            
             return Json(str1);
-                
         }
         
         public string Test(object username)
