@@ -27,10 +27,10 @@
     </div>
     foreach (var item in Model.Item1)
     {
-    <div class="row">
+    <div class="container-fluid row">
         <div class="col-md-2">
             <a href="#myModal" data-toggle="modal"
-                                  data-userId="@item.userId" data-fname = "@item.fname" 
+                                  data-userid="@item.userId.ToString()" data-fname = "@item.fname" 
                                   data-mname = "@item.mname" data-lname = "@item.lname" 
                                   data-email = "@item.email" data-password = "@item.password" >
                 @item.userId</a>
@@ -46,72 +46,114 @@
         </div>
     </div>
     }
-
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">
-                </h4>
-            </div>
-            <div class="modal-body">
-
-                <div class="form-group">
-                    <label for="Item2_fname" class="control-label">
-                        F Name:</label>
-                    @Html.TextBoxFor(m => m.Item2.fname, new { @class="form-control" }) 
+    <div class="modal fade" id="myModal1" tabindex="-1" role="dialog" aria-labelledby="myModal1Label"
+        style="z-index: 99999" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">
+                        Modal title</h4>
                 </div>
-                <div class="form-group">
-                    <label for="Item2_mname" class="control-label">
-                        M Name:</label>
-                        @Html.TextBoxFor(m => m.Item2.mname, new { @class = "form-control" }) 
+                <div class="modal-body">
+                    <p>
+                        One fine body&hellip;</p>
                 </div>
-                <div class="form-group">
-                    <label for="Item2_lname" class="control-label">
-                        L Name:</label>
-                        @Html.TextBoxFor(m => m.Item2.lname, new { @class = "form-control" }) 
-                </div>
-                <div class="form-group">
-                    <label for="Item2_email" class="control-label">
-                        Email:</label>
-                        @Html.TextBoxFor(m => m.Item2.email, new { @class = "form-control" }) 
-                </div>
-                <div class="form-group">
-                    <label for="Item2_password" class="control-label">
-                        Password:</label>
-                        @Html.TextBoxFor(m => m.Item2.password, new { @class = "form-control" }) 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close</button>
+                    <button type="button" class="btn btn-primary">
+                        Save changes</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">
-                    Close</button>
-                <button type="submit" id="btnSave" class="btn btn-primary"> 
-                    Save changes</button>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+    <!-- Modal -->
+    <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">
+                    </h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Item2_fname" class="control-label">
+                                    F Name:</label>
+                                @Html.TextBoxFor(m => m.Item2.fname, new { @class = "form-control" })
+                            </div>
+                            <div class="form-group">
+                                <label for="Item2_mname" class="control-label">
+                                    M Name:</label>
+                                @Html.TextBoxFor(m => m.Item2.mname, new { @class = "form-control " })
+                            </div>
+                            <div class="form-group">
+                                <label for="Item2_lname" class="control-label">
+                                    L Name:</label>
+                                @Html.TextBoxFor(m => m.Item2.lname, new { @class = "form-control " })
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="Item2_email" class="control-label">
+                                    Email:</label>
+                                @Html.TextBoxFor(m => m.Item2.email, new { @class = "form-control " })
+                            </div>
+                            <div class="form-group">
+                                <label for="Item2_password" class="control-label">
+                                    Password:</label>
+                                @Html.TextBoxFor(m => m.Item2.password, new { @class = "form-control " })
+                            </div>
+                            <div class="form-group">
+                                <label for="Item2_userId" class="control-label">
+                                    UserId:</label>
+                                @Html.DropDownList("UserList", "select")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a href="#myModal1" data-toggle="modal">Delete</a> @*<button type="button" class="btn btn-default" data-target="#myModal1">
+                        Delete</button>*@
+                    <button type="button" class="btn btn-default" data-dismiss="modal">
+                        Close</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary" onclick="return validation();">
+                        Save changes</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-<div>
-    Email: @Html.TextBox("Email")
-    Password :@Html.Password("txtPassword")
-    Confirm Password : @Html.Password("txtConfirmPassword")
-    DOB: @Html.TextBox("txtDob", "", new { @readonly = "readonly" })
-    Age: @Html.TextBox("txtAge")
-    Mobile: @Html.TextBox("txtMobile", "", new { @pattern = "\\d{3}[\\-]\\d{3}[\\-]\\d{4}", type = "number" })
-</div>
-<div>
-    <input id="btnSubmit" type="submit" name="save" value="Save" />
-</div>
+    <div>
+        Email: @Html.TextBox("Email")
+        Password :@Html.Password("txtPassword")
+        Confirm Password : @Html.Password("txtConfirmPassword")
+        DOB: @Html.TextBox("txtDob", "", new { @readonly = "readonly" })
+        Age: @Html.TextBox("txtAge")
+        Mobile: @Html.TextBox("txtMobile", "", new { @pattern = "\\d{3}[\\-]\\d{3}[\\-]\\d{4}", type = "number" })
+    </div>
+    <div>
+        <input id="btnSubmit" type="submit" name="save" value="Save" />
+    </div>
 }
 <script type="text/javascript">
-    
+
+    function validation() {
+        var modal = $('#myModal');
+        modal.find('#Item2_fname').addClass('alert');
+        return false;
+    }
     $('#myModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget);
-        var userId = button.data('userId');
+        var userId = button.data('userid');
         var fname = button.data('fname');
         var mname = button.data('mname');
         var lname = button.data('lname');
@@ -124,6 +166,10 @@
         modal.find('#Item2_lname').val(lname);
         modal.find('#Item2_email').val(email);
         modal.find('#Item2_password').val(password);
+        //modal.find('#UserList').val('');
+        $('#UserList option[value="' + userId + '"]').prop('selected', true);
+        $('#UserList').select(userId);
+
     });
 
     $('#txtDob').datepicker({
