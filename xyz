@@ -1,1 +1,275 @@
 
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Transactions;
+
+namespace mvc_without_ef.DL
+{
+    public class DbContext
+    {
+        private string CONNECTION_STRING = "data source=SYS30\\SQLEXPRESS;uid=sa;pwd=sqlserver2008;Database=test;";
+        
+        public SqlCommand CreateCommand(string query,SqlConnection con,CommandType type, SqlParameter[] prms)
+        {
+            SqlCommand cmd = new SqlCommand(query, con);
+            cmd.CommandType = type;
+            if (prms != null)
+            {
+                foreach (SqlParameter parameter in prms)
+                {
+                    cmd.Parameters.Add(parameter);
+                }
+            }
+            return cmd;
+        }
+
+        #region Execute Non Query
+        /// <summary>
+        /// This is execute non query that retur number of rows affected from db using store procedure
+        /// </summary>
+        /// <param name="procName">Procedure name</param>
+        /// <param name="sqlparams">sql parameters</param>
+        /// <returns>int rows</returns>
+        public int ExecuteNonSqlProc(string procName, params SqlParameter[] sqlparams)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    int rows = 0;
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(procName, connection, CommandType.StoredProcedure, sqlparams))
+                        {
+                            connection.Open();
+                            rows = command.ExecuteNonQuery();
+                        }
+                    }
+                    scope.Complete();
+                    return rows;
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        /// <summary>
+        /// This is execute non query that retur number of rows affected from db using query
+        /// </summary>
+        /// <param name="query">query text</param>
+        /// <returns>int rows</returns>
+        public int ExecuteNonSqlQry(string query)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    int rows = 0;
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(query, connection, CommandType.Text, null))
+                        {
+                            connection.Open();
+                            rows = command.ExecuteNonQuery();
+                        }
+                    }
+                    scope.Complete();
+                    return rows;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        } 
+        #endregion
+
+        #region Execute Scalar Query
+        /// <summary>
+        /// This is execute scalar query that return single value from db using store procedure
+        /// </summary>
+        /// <param name="procName">Procedure Name</param>
+        /// <param name="sqlparams">sql paramters</param>
+        /// <returns>string result</returns>
+        public string ExecuteScalarSqlProc(string procName, params SqlParameter[] sqlparams)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    string result = null;
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(procName, connection, CommandType.StoredProcedure, sqlparams))
+                        {
+                            connection.Open();
+                            result = Convert.ToString(command.ExecuteScalar());
+                        }
+                    }
+                    scope.Complete();
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+
+        public string ExecuteScalarSqlQry(string query)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    string result = null;
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(query, connection, CommandType.Text, null))
+                        {
+                            connection.Open();
+                            result = Convert.ToString(command.ExecuteScalar());
+                        }
+                    }
+                    scope.Complete();
+                    return result;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        } 
+        #endregion
+
+        #region Execute Reader
+        /// <summary>
+        /// this is execute reader query that return sqlreader single row
+        /// </summary>
+        /// <param name="procName"></param>
+        /// <param name="sqlParams"></param>
+        /// <returns></returns>
+        public SqlDataReader ExecuteReaderSqlProc(string procName, params SqlParameter[] sqlParams)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    SqlDataReader dr = null;
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(procName, connection, CommandType.StoredProcedure, sqlParams))
+                        {
+                            connection.Open();
+                            dr = command.ExecuteReader();
+                        }
+                    }
+                    scope.Complete();
+                    return dr;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// This is execute reader that return single row from db
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns></returns>
+        public SqlDataReader ExecuteReaderSqlQry(string query)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    SqlDataReader dr = null;
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(query, connection, CommandType.Text, null))
+                        {
+                            connection.Open();
+                            dr = command.ExecuteReader();
+                        }
+                    }
+                    scope.Complete();
+                    return dr;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        } 
+        #endregion
+        /// <summary>
+        /// Fill dataset using store procedure
+        /// </summary>
+        /// <param name="procName"></param>
+        /// <param name="sqlParams"></param>
+        /// <returns>Dataset</returns>
+        public DataSet FillDataSetSqlproc(string procName,params SqlParameter[] sqlParams)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    DataSet ds = new DataSet();
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(procName,connection,CommandType.StoredProcedure,sqlParams))
+                        {
+                            connection.Open();
+                            SqlDataAdapter adp = new SqlDataAdapter(command);
+                            adp.Fill(ds);
+                        }
+                    }
+                    scope.Complete();
+                    return ds;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+        /// <summary>
+        /// Fill dataset using query
+        /// </summary>
+        /// <param name="query"></param>
+        /// <returns>Dataset</returns>
+        public DataSet FillDataSetSqlQry(string query)
+        {
+            try
+            {
+                using (TransactionScope scope = new TransactionScope())
+                {
+                    DataSet ds = new DataSet();
+                    using (SqlConnection connection = new SqlConnection(CONNECTION_STRING))
+                    {
+                        using (SqlCommand command = CreateCommand(query, connection, CommandType.Text, null))
+                        {
+                            connection.Open();
+                            SqlDataAdapter adp = new SqlDataAdapter(command);
+                            adp.Fill(ds);
+                        }
+                    }
+                    scope.Complete();
+                    return ds;
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
+    }
+}
