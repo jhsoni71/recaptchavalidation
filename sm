@@ -1,1 +1,319 @@
 
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using Tameeni.Entities;
+
+namespace Tameeni.Admin.Helper
+{
+    /// <summary>
+    /// SessionManager
+    /// </summary>
+    public static class SessionManager
+    {
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is super admin.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is super admin; otherwise, <c>false</c>.
+        /// </value>
+        public static bool isSuperAdmin
+        {
+            get
+            {
+                if (HttpContext.Current.Session["isSuperAdmin"] != null)
+                {
+                    return (bool)HttpContext.Current.Session["isSuperAdmin"];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["isSuperAdmin"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is admin user management.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is admin user management; otherwise, <c>false</c>.
+        /// </value>
+        public static bool IsAdminUserManagement
+        {
+            get
+            {
+                if (HttpContext.Current.Session["IsAdminUserManagement"] != null)
+                {
+                    return (bool)HttpContext.Current.Session["IsAdminUserManagement"];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["IsAdminUserManagement"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the random question no.
+        /// </summary>
+        /// <value>
+        /// The random question no.
+        /// </value>
+        public static int RandomQuestionNo
+        {
+            get
+            {
+                if (HttpContext.Current.Session["RandomQuestionNo"] != null)
+                {
+                    return (int)HttpContext.Current.Session["RandomQuestionNo"];
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["RandomQuestionNo"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is admin verify user validation.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is admin verify user validation; otherwise, <c>false</c>.
+        /// </value>
+        public static bool IsAdminVerifyUserValidation
+        {
+            get
+            {
+                if (HttpContext.Current.Session["IsAdminVerifyUserValidation"] != null)
+                {
+                    return (bool)HttpContext.Current.Session["IsAdminVerifyUserValidation"];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["IsAdminVerifyUserValidation"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected language.
+        /// </summary>
+        /// <value>
+        /// The selected language.
+        /// </value>
+        public static string SelectedLanguage
+        {
+            get
+            {
+                if (HttpContext.Current.Session["SelectedLanguage"] != null)
+                {
+                    return (string)HttpContext.Current.Session["SelectedLanguage"];
+                }
+                else
+                {
+                    return CacheManager.GetResourceValue("HomeIndex", "Arabic", 2);
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["SelectedLanguage"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the selected culture.
+        /// </summary>
+        /// <value>
+        /// The selected culture.
+        /// </value>
+        public static int SelectedCulture
+        {
+            get
+            {
+                if (HttpContext.Current.Session["SelectedCulture"] != null)
+                {
+                    return (int)HttpContext.Current.Session["SelectedCulture"];
+                }
+                else
+                {
+                    return 1;
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["SelectedCulture"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Pending Dealer Company Count.
+        /// </summary>
+        /// <value>
+        /// The pending dealer company count.
+        /// </value>
+        /// <createdon>11/03/2015</createdon>
+        /// <createdby>Rujuta Xavier</createdby>
+        public static int PendingDealerCompanyCount
+        {
+            get
+            {
+                if (HttpContext.Current.Session["PendingDealerCompanyCount"] != null)
+                {
+                    return (int)HttpContext.Current.Session["PendingDealerCompanyCount"];
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["PendingDealerCompanyCount"] = value;
+            }
+        }
+
+        #region Logged-In User Session
+
+        /// <summary>
+        /// Gets or sets the user.
+        /// </summary>
+        /// <value>
+        /// The user.
+        /// </value>
+        public static UserMaster User
+        {
+            get
+            {
+                if (HttpContext.Current.Session["User"] != null)
+                {
+                    return (UserMaster)HttpContext.Current.Session["User"];
+                }
+                else
+                {
+                    return new UserMaster();
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["User"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the menu list.
+        /// </summary>
+        /// <value>
+        /// The menu list.
+        /// </value>
+        public static List<ScreenMaster> MenuList
+        {
+            get
+            {
+                if (HttpContext.Current.Session["MenuList"] != null)
+                {
+                    return (List<ScreenMaster>)HttpContext.Current.Session["MenuList"];
+                }
+                else
+                {
+                    return new List<ScreenMaster>();
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["MenuList"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the role screen mapping list.
+        /// </summary>
+        /// <value>
+        /// The role screen mapping list.
+        /// </value>
+        public static List<RoleScreenMapping> RoleScreenMappingList
+        {
+            get
+            {
+                if (HttpContext.Current.Session["RoleScreenMappingList"] != null)
+                {
+                    return (List<RoleScreenMapping>)HttpContext.Current.Session["RoleScreenMappingList"];
+                }
+                else
+                {
+                    return new List<RoleScreenMapping>();
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["RoleScreenMappingList"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether this instance is admin step one complete.
+        /// </summary>
+        /// <value>
+        /// <c>true</c> if this instance is admin step one complete; otherwise, <c>false</c>.
+        /// </value>
+        public static bool isAdminStepOneComplete
+        {
+            get
+            {
+                if (HttpContext.Current.Session["isAdminStepOneComplete"] != null)
+                {
+                    return (bool)HttpContext.Current.Session["isAdminStepOneComplete"];
+                }
+                else
+                {
+                    return false;
+                }
+            }
+
+            set
+            {
+                HttpContext.Current.Session["isAdminStepOneComplete"] = value;
+            }
+        }
+
+        /// <summary>
+        /// Log Off and Clear Sessions
+        /// </summary>
+        public static void LogOff()
+        {
+            HttpContext.Current.Session.Clear();
+        }
+
+        #endregion
+
+        #region Guest Session
+
+        #endregion
+    }
+}
