@@ -1,0 +1,27 @@
+public string Encrypt(string plainText)
+        {
+            try
+            {
+                Rijndael _Rijndael = new Rijndael(ConfigurationManager.AppSettings["RijndaelKey"].ToString());
+                return _Rijndael.Encrypt(plainText).ToString();
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An exception occurred.", ex);
+                throw;
+            }
+
+        }
+        public string Decrypt(string cipherText)
+        {
+            try
+            {
+                Rijndael _Rijndael = new Rijndael(ConfigurationManager.AppSettings["RijndaelKey"].ToString());
+                return _Rijndael.Decrypt(cipherText).ToString();
+            }
+            catch (Exception ex)
+            {
+                logger.Error("An exception occurred.", ex);
+                throw;
+            }
+        }
